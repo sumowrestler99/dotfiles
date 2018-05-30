@@ -1,0 +1,217 @@
+#!/bin/bash
+if [ "$COLORLS" != "0" ]; then
+function dir() {
+	OS=`uname`
+	case $OS in
+	Linux | SunOS*)
+		COLOR=1;;
+	*)
+		COLOR=0;;
+	esac
+
+	COMMAND="ls -AF "
+	if [ "$COLORLS" = "2" ] && [ "$COLOR" = "1" ]; then
+		COMMAND=${COMMAND}"--si --color "
+	elif [ "$COLOR" = "1" ]; then
+		COMMAND=${COMMAND}"-H --color "
+	fi
+	WIDE=0
+	RECURSE=0
+	PAUSE=0
+	PARAM=""
+	for NAME in $*; do 
+		if [ "$NAME" = "-w" ]; then
+			WIDE=1
+		elif [ "$NAME" = "-s" ]; then
+			RECURSE=1
+		elif [ "$NAME" = "-p" ]; then
+			PAUSE=1
+		else
+			PARAM=${PARAM}" "${NAME}
+		fi
+	done
+	if [ "$WIDE" != "1" ]; then COMMAND=${COMMAND}"-l "
+	elif [ "$PAUSE" = "1" ]; then
+		COMMAND=${COMMAND}"--format=across "
+	fi
+	if [ "$RECURSE" = "1" ]; then
+		COMMAND=${COMMAND}"-R "
+	fi
+	COMMAND=${COMMAND}${PARAM}" "
+	if [ "$PAUSE" = "1" ]; then
+		$COMMAND | less -r -X -E
+	else
+		$COMMAND 
+	fi
+	unset OS COLOR WIDE RECURSE PAUSE PARAM COMMAND
+}
+fi
+
+function chgx() {
+    testpwd=${PWD#?p*swbd}
+    if [ "$PWD" = "$testpwd" ]; then
+# in source directory
+        cd `pwd | sed -e "s/\(slxos_main[0-9]\?\)/\1\/build\/swbd${1}/g"`
+    else
+#in build directory
+        cd `echo $PWD | sed 's#/build/swbd[0-9]\+/#/#'`
+    fi
+
+}
+
+function chgy() {
+    if [[ "$PWD" = *"main2"* ]]; then
+# in main2 directory
+        cd `pwd | sed -e "s/slxos_main\([0-9]\)\+/slxos_main/g"`
+    else
+#in main directory
+        cd `pwd | sed -e "s/slxos_main/slxos_main2/g"`
+    fi
+
+}
+
+function chg() { chgy; }
+function chg2() { chgx 4000; }
+
+function gwd() {
+	if [ -x /bin/awk ]; then
+		pwd | awk '
+			BEGIN { FS="/"; ORS="" }
+			{ if (NF > 4) {
+			      printf "/%s...",$2; for (i=NF-2;i<NF;i++) printf "%s/",$i} print $i}
+			END {print "\n" } '
+	else
+		pwd
+	fi
+}
+
+
+function define(){ local y="$@";curl -sA"Opera" "http://www.google.com/search?q=define:${y// /+}"|grep -Po '(?<=<li>)[^<]+'|nl|perl -MHTML::Entities -pe 'decode_entities($_)' 2>/dev/null;}
+
+function tmd() {
+	 eval `tmux showenv|awk '/^(DISPLAY|SSH_AUTH_SOCK|LANG)/ {print "export", $0 }'`
+}
+
+#remove host entries in known_hosts
+ssk() {
+	sed -i ${1}d $HOME/.ssh/known_hosts
+}
+
+git_status() {
+	local str
+	local staged
+	local other
+	local branch
+	local modified
+    if [[ -z $(git rev-parse --git-dir 2> /dev/null) ]]; then 
+		str=""
+	else
+	    modified=$(git ls-files --modified | wc -l)
+		staged=$(git diff --staged --name-status | wc -l)
+		other=$(git ls-files --others --exclude-standard | wc -l)
+		branch=$(git symbolic-ref HEAD 2> /dev/null)
+		branch=${branch##*/}
+		str="${branch}+${modified}⊕${staged}⋯${other}"
+#		str="${branch} ⊕${staged}" 
+	fi
+	echo "$str" > /tmp/it2_uv
+}
+
+# bash: Place this in .bashrc.
+function iterm2_print_user_vars() {
+	local tmp_file=/tmp/it2_uv
+	local override_passget="false"	# When true a force reloaded will be done.
+
+	# Create the cache file if it doesn't exist.
+	if [ ! -f "$tmp_file" ]; then
+		touch $tmp_file
+		override_passget=true
+	fi
+	# Refresh if the tempfile is older than $interval minutes.
+	let interval=120
+#	if shell_is_osx || shell_is_bsd; then
+#		last_update=$(stat -f "%m" ${tmp_file})
+#	elif shell_is_linux; then
+		last_update=$(stat -c "%Y" ${tmp_file})
+#	fi
+	if [ "$(( $(date +"%s") - ${last_update} ))" -gt "$interval" ] || [ "$override_passget" == true ]; then
+		( git_status & )
+	fi
+	str=$(cat $tmp_file)
+	/home/ls400966/.iterm2/it2setkeylabel set status "$str"
+	iterm2_set_user_var gitBranch "$str"
+}
+
+__fzf_concmd_list__() (
+  local line
+  shopt -u nocaseglob nocasematch
+  line=$(
+    HISTTIMEFORMAT= grep rname ~/.conCfg | 
+    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS --tac -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS +m" $(__fzfcmd) |
+    command cut -d" " -f1 | cut -d= -f2 ) && echo -e "con ${line}"
+)
+__fzf_telcmd_list__() (
+  local line
+  shopt -u nocaseglob nocasematch
+  line=$(
+    HISTTIMEFORMAT= grep rname ~/.telCfg | 
+    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS --tac -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS +m" $(__fzfcmd) |
+    command cut -d" " -f1 | cut -d= -f2 ) && echo -e "tel ${line}"
+)
+
+function og() {
+	opengrok-cli.phar --no-ansi $@ | og.py
+}
+
+function cpv()
+{
+  local DST=${@: -1}                    # last element
+  local SRC=( ${@: 1 : $# - 1} )        # array with rest of elements
+
+  # checks
+  type pv &>/dev/null || { echo "install pv first"; return 1; }
+  [ $# -lt 2  ]       && { echo "too few args"    ; return 1; }
+
+  # special invocation
+  function cpv_rename()
+  {
+    local SRC="$1"
+    local DST="$2"
+    local DSTDIR="$( dirname "$DST" )"
+
+    # checks
+    if   [ $# -ne 2     ]; then echo "too few args"          ; return 1; fi
+    if ! [ -e "$SRC"    ]; then echo "$SRC doesn't exist"    ; return 1; fi
+    if   [ -d "$SRC"    ]; then echo "$SRC is a dir"         ; return 1; fi
+    if ! [ -d "$DSTDIR" ]; then echo "$DSTDIR does not exist"; return 1; fi
+
+    # actual copy
+    echo -e "\n$SRC 🡺  $DST"
+    pv   "$SRC" >"$DST"
+  }
+
+  # special case for cpv_rename()
+  if ! [ -d "$DST" ]; then cpv_rename "$@"; return $?; fi;
+
+  # more checks
+  for src in "${SRC[@]}"; do 
+    local dst="$DST/$( basename "$src" )"
+    if ! [ -e "$src" ]; then echo "$src doesn't exist" ; return 1;
+    elif [ -e "$dst" ]; then echo "$dst already exists"; return 1; fi
+  done
+
+  # actual copy
+  for src in "${SRC[@]}"; do 
+    if ! [ -d "$src" ]; then 
+      local dst="$DST/$( basename "$src" )"
+      echo -e "\n$src -> $dst"
+      pv "$src" > "$dst"
+    else 
+      local dir="$DST/$( basename "$src" )"
+      mkdir "$dir" || continue
+      local srcs=( $src/* )
+      cpv "${srcs[@]}" "$dir";
+    fi
+  done
+  unset cpv_rename
+}

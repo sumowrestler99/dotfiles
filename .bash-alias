@@ -1,0 +1,46 @@
+# User specific aliases and functions
+alias rm='rm -r'
+alias cp='cp -r'
+alias md='mkdir $*'
+alias rd='rm -rf $*'
+#alias pr2col='a2ps --medium=Letter -stumble -C -T4 -2 -d $*'
+alias pr2col='enscript -2rGC -T4 -DDuplex:true -DTumble:true -Ec -fCourier8 --header="%W|$n|Page $% of $=" $*'
+alias pr2max='a2ps --medium=Letter -stumble -T4 --prologue=matrix -C -2 -d $*'
+alias pr2clr='a2ps --medium=Letter -T4 --printer=sj3-3-1c --prologue=color -C -2 $*'
+
+alias cls=clear
+
+if [ "$COLORLS" = "1" ]; then
+	alias ls='ls --color=auto'
+fi
+alias grep='grep --color=auto'
+alias man='man -S 2:3:1'
+#
+alias df='df -x supermount'
+
+
+alias gospr='cd /projects/slxos_dev/ls400966/slx/slxos_main'
+alias exit='echo -e "\033]0;\007"; exit'
+alias vi='~/linux/bin64/nvim'
+#alias diff='~/bin/colordiff.pl $*'
+#use vim as a syntax highlighting pager
+alias odb='off_db_script_x $*'
+alias odbh='off_db_script_x -n HAWK $*'
+alias odbh2='off_db_script_x -n HAWK2 $*'
+alias db='off_db_script $*'
+alias dbh='off_db_script -n HAWK $*'
+alias dbh2='off_db_script-n HAWK2 $*'
+alias tmuxtitle='printf "\033k%s\033\\" $*'
+alias trace_wt='while [ `ls *.processed 2> /dev/null | wc -l ` -eq 0 ]; do sleep 1; done; ls -lag'
+
+alias pb='pushbullet_cmd.py 4KlqahCKqylSmnLHlDc4y5CQLpvLTerH note "from wkstation" $*'
+
+alias csxdk='pushd /scratch/sjc-dsa/lsiao; cscope -bq `find $PWD -name *.[ch] -o -name *.[ch]pp`; popd'
+alias scp='scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+alias vislxcheat='vi gdrive:18gpwqtjgKpoP7JLNnTPwpj9TMT5XUDWp'
+alias bsub='/tools/bin/bsub -q sj-slx  $*'
+alias bldall='/tools/bin/bsub -q sj-slx -o ~/bsub.out ~/bin/build_script2.sh'
+alias bld='/tools/bin/bsub -q sj-slx -o ~/bsub.out ~/bin/build_script.sh'
+alias itbg='/home/ls400966/.iterm2/it2setcolor selbg fff'
+alias vigit='vi $(git ls-files | fzf)'
+alias lc='colorls'
