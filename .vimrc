@@ -13,10 +13,9 @@ let g:my_home=$HOME . '/'
 set nocompatible " must be first line
 
 if has('nvim')
-	if executable("/usr/local/bin/python2.7")
+	if filereadable("/usr/local/bin/python2.7")
 		let g:python_host_prog="/usr/local/bin/python2.7"
-	endif
-	if executable("/usr/bin/python2.7")
+	elseif filereadable("/usr/bin/python2.7")
 		let g:python_host_prog="/usr/bin/python2.7"
 	endif
 	let g:python_host_skip_check=1 "faster loading time
