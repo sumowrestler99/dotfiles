@@ -8,12 +8,17 @@ if !has('nvim')
 endif
 set termencoding=utf-8
 scriptencoding utf-8
-let g:my_home="/home/ls400966/"
+let g:my_home=$HOME . '/'
 
 set nocompatible " must be first line
 
 if has('nvim')
-	let g:python_host_prog="/usr/local/bin/python2.7"
+	if executable("/usr/local/bin/python2.7")
+		let g:python_host_prog="/usr/local/bin/python2.7"
+	endif
+	if executable("/usr/bin/python2.7")
+		let g:python_host_prog="/usr/bin/python2.7"
+	endif
 	let g:python_host_skip_check=1 "faster loading time
 	let g:python3_host_prog="/usr/local/bin/python3.6"
 	let g:python3_host_skip_check=1 "faster loading time
@@ -31,9 +36,15 @@ if isdirectory(g:mybundle . "Vundle.vim")
 	"let g:mybundle=g:mybundle . "Vundle.vim"
 	"set rtp+=g:mybundle
 
+	"Use git 'protocol' instead of https to download bundles
 	let g:vundle_default_git_proto = 'git'
 	set rtp+=~/.vim/bundle/Vundle.vim
-	set rtp+=~/.fzf
+	if isdirectory("/usr/local/opt/fzf")
+		set rtp+=/usr/local/opt/fzf
+	endif
+	if isdirectory("~/.fzf")
+		set rtp+=~/.fzf
+	endif
 	call vundle#rc()
 	call vundle#begin()
 	Plugin 'VundleVim/Vundle.vim'
@@ -253,6 +264,12 @@ set tags=./tags,/projects/slxos_dev/ls400966/slx/slxos_main/tags
 if has("cscope")
 	"get rid of cscope warning messages
 	set nocscopeverbose
+	if filereadable ("/Volumes/slxos_dev/slxos_main/cscope.out")
+		cscope add /Volumes/slxos_dev/slxos_main/cscope.out /Volumes/slxos_dev/slxos_main
+	endif
+	if filereadable ("/Volumes/slxos_dev/slxos_sdk/cscope.out")
+		cscope add /Volumes/slxos_dev/slxos_sdk/cscope.out /Volumes/slxos_dev/slxos_sdk
+	endif
 	if filereadable ("/projects/slxos_dev/ls400966/slx/slxos_main/cscope.out")
 		cscope add /projects/slxos_dev/ls400966/slx/slxos_main/cscope.out /projects/slxos_dev/ls400966/slx/slxos_main
 	endif
@@ -609,7 +626,7 @@ if isdirectory(g:mybundle . "vim-airline")
 	autocmd vimrc BufReadPre *.vba let g:airline#extensions#tagbar#enabled = 0
 	autocmd vimrc BufReadPre *.cpp,*.hpp,*.c,*.h :set number
 	if (!has("gui_vimr"))
-		let g:airline_theme='dark'
+		let g:airline_theme='solarized'
 	endif
 endif
 " }}}
@@ -680,7 +697,6 @@ if isdirectory(g:mybundle . "vim-opengrok-search")
 	let b:ogs_app_url = 'http://10.59.132.222:8080/slxos/'
 endif
 " }}}
-"
 
 " this mapping Enter key to <C-y> to chose the current highlight item 
 " and close the selection list, same as other IDEs.
