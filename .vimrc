@@ -6,6 +6,9 @@
 if !has('nvim')
 	set encoding=utf-8
 endif
+"disable curstoy style changes. this fixes weird characters on gnome-terminal
+set guicursor=
+
 set termencoding=utf-8
 scriptencoding utf-8
 let g:my_home=$HOME . '/'
@@ -269,14 +272,24 @@ if has("cscope")
 	if filereadable ("/Volumes/slxos_dev/slxos_sdk/cscope.out")
 		cscope add /Volumes/slxos_dev/slxos_sdk/cscope.out /Volumes/slxos_dev/slxos_sdk
 	endif
-	if filereadable ("/projects/slxos_dev/ls400966/slx/slxos_main/cscope.out")
-		cscope add /projects/slxos_dev/ls400966/slx/slxos_main/cscope.out /projects/slxos_dev/ls400966/slx/slxos_main
-	endif
 	if filereadable ("/projects/slxos_dev/ls400966/slx/slxos_sdk/cscope.out")
 		cscope add /projects/slxos_dev/ls400966/slx/slxos_sdk/cscope.out /projects/slxos_dev/ls400966/slx/slxos_sdk
 	endif
+	if filereadable ("/projects/slxos_dev/ls400966/slx/slxos_sdk.bak/cscope.out")
+		cscope add /projects/slxos_dev/ls400966/slx/slxos_sdk.bak/cscope.out /projects/slxos_dev/ls400966/slx/slxos_sdk.bak
+	endif
 
 	set cscopequickfix="s-,c-,d-,i-,t-,e-"
+	let cwd = getcwd()
+	if cwd =~ "slxos_main2"
+		if filereadable ("/projects/slxos_dev/ls400966/slx/slxos_main2/cscope.out")
+			cscope add /projects/slxos_dev/ls400966/slx/slxos_main2/cscope.out /projects/slxos_dev/ls400966/slx/slxos_main2
+		endif
+	else
+		if filereadable ("/projects/slxos_dev/ls400966/slx/slxos_main/cscope.out")
+			cscope add /projects/slxos_dev/ls400966/slx/slxos_main/cscope.out /projects/slxos_dev/ls400966/slx/slxos_main
+		endif
+	endif
 endif
 
 "create cscope in local directory (used in cctree plugin i.e. :CCTreeLoadDB)
@@ -575,7 +588,7 @@ if isdirectory(g:mybundle . "vim-airline")
 				let g:airline_powerline_fonts = 1
 				"extra nerd-fonts patched fonts
 				let g:airline_left_sep = "\uE0c0"
-				let g:airline_right_sep = "\uE0c2"
+				"let g:airline_right_sep = "\uE0c2"
 				let g:airline_section_z = airline#section#create(['%3p%% ' . "\uE0A1" . '%{line(".")}/%L ' . "\uE0A3" . '%{col(".")}'])
 			else
 				let g:airline_section_z = airline#section#create(['%3p%% ' . '%{line(".")}/%L ' . '%{col(".")}'])
@@ -586,7 +599,7 @@ if isdirectory(g:mybundle . "vim-airline")
 			let g:airline_powerline_fonts = 1
 			"extra nerd-fonts patched fonts
 			let g:airline_left_sep = "\uE0c0"
-			let g:airline_right_sep = "\uE0c2"
+			"let g:airline_right_sep = "\uE0c2"
 			let g:airline_section_z = airline#section#create(['%3p%% ' . "\uE0A1" . '%{line(".")}/%L ' . "\uE0A3" . '%{col(".")}'])
 		else
 			let g:airline_powerline_fonts = 0

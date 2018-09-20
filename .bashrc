@@ -72,7 +72,7 @@ export SSH_AUTH_SOCK   # enable gpg-agent for ssh
 # git completion
 [ -f ~/git-completion.bash ] && . ~/git-completion.bash
 
-export OPENGROK_SERVER=http://10.59.132.222:8080/slxos/
+export OPENGROK_SERVER=http://10.59.132.240:8081/18.1.01x
 export MY_BUILD=$USER/slx/slxos_main
 export MY_VSLX_BUILD=/slxos_dev/ls400966/slx/slxos_main/build/dist/mpls/
-export LATEST_BUILD=daily/18.1.00/LATEST_BUILD
+export LATEST_BUILD=daily/18.1.01x/LATEST_BUILD
