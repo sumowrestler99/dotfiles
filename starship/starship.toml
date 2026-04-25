@@ -1,0 +1,80 @@
+add_newline = false
+format = """
+$hostname\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_status\
+$c\
+$python\
+$lua\
+$golang\
+$rust\
+$cmd_duration\
+$status\
+$character"""
+
+[git_status]
+format = "[[$conflicted](yellow)[$untracked](peach)[$modified$renamed](white)[$staged](green)[$deleted](red)($ahead_behind$stashed)]($style)"
+conflicted = " $count "
+untracked  = " $count "
+modified   = " $count "
+deleted    = " $count "
+staged     = " $count "
+renamed    = " $count "
+stashed    = " $count "
+style      = "cyan"
+
+[git_metrics]
+disabled = true
+
+[line_break]
+disabled = true
+
+[directory]
+truncation_length       = 3
+truncate_to_repo        = true
+fish_style_pwd_dir_length = 1
+read_only               = " 󰌾"
+
+[hostname]
+ssh_symbol = " "
+
+[git_branch]
+symbol = " "
+
+[git_commit]
+tag_symbol = ' '
+
+[c]
+symbol = " "
+
+[python]
+symbol = " "
+
+[lua]
+symbol = " "
+
+[golang]
+symbol = " "
+
+[rust]
+symbol = "󱘗 "
+
+[cmd_duration]
+min_time = 2_000
+format   = "[ $duration]($style) "
+style    = "yellow"
+
+[status]
+disabled = false
+format   = "[$symbol$status]($style) "
+symbol   = " "
+style    = "red"
+
+[gcloud]
+disabled = true
+
+[username]
+disabled = true

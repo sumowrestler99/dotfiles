@@ -1,0 +1,62 @@
+# =============================================================================
+# PATH
+# =============================================================================
+export PATH=/opt/homebrew/bin:~/bin:$HOME/Library/Python/3.9/bin:$HOME/.local/bin:$PATH
+
+# =============================================================================
+# Environment
+# =============================================================================
+export LANGUAGE=en_US.UTF-8
+export LC_MESSAGES=en_US.UTF-8   # force English error messages
+export COLORTERM=truecolor
+[[ -f ~/.secrets ]] && source ~/.secrets
+
+# =============================================================================
+# Aliases
+# =============================================================================
+alias vi=nvim
+alias ls=lsd
+alias grep='grep --color=always'
+
+# =============================================================================
+# Completion
+# =============================================================================
+autoload -U compinit; compinit
+
+# =============================================================================
+# fzf
+# =============================================================================
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# SSH host picker — fuzzy select a host from ~/.ssh/config and connect.
+# Bound to Ctrl-S. stty -ixon disables terminal flow control which normally
+# intercepts Ctrl-S before zsh can see it.
+stty -ixon
+function _fzf_ssh() {
+    local host
+    host=$(command grep -E '^Host ' ~/.ssh/config | awk '{print $2}' | command grep -v '\*' \
+        | fzf --height=40% --layout=reverse --border --prompt='SSH> ' \
+              --preview='command grep -A5 "^Host {}$" ~/.ssh/config')
+    if [[ -n "$host" ]]; then
+        BUFFER="ssh $host"
+        zle accept-line
+    fi
+}
+zle -N _fzf_ssh
+bindkey '^S' _fzf_ssh
+
+# =============================================================================
+# zoxide
+# =============================================================================
+export _ZO_ECHO=1                          # print resolved path before jumping
+export _ZO_MAXAGE=10000                    # max total frecency score before pruning old entries
+export _ZO_EXCLUDE_DIRS="/tmp:/private/tmp:$TMPDIR"  # don't index temp dirs
+export _ZO_FZF_OPTS="--height=40% --layout=reverse --border --preview 'ls -la {}' --preview-window=right:40%"
+eval "$(zoxide init zsh)"
+
+# =============================================================================
+# Shell integrations (keep last — these modify PS1/prompt)
+# =============================================================================
+#source ~/.iterm2_shell_integration.zsh
+eval "$(atuin init zsh)"
+eval "$(starship init zsh)"

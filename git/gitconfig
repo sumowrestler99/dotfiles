@@ -1,0 +1,37 @@
+[user]
+	name = sumowrestler99
+	email = sumowrestler@gmail.com
+
+[core]
+	editor = nvim
+	autocrlf = input
+
+[init]
+	defaultBranch = main
+
+[alias]
+	lg = log --oneline --graph --decorate --all
+	st = status -sb
+	co = checkout
+	br = branch
+	undo = reset HEAD~1 --mixed
+	uncommit = reset --soft HEAD~1
+	aliases = config --get-regexp alias
+
+[pull]
+	rebase = true
+
+[merge]
+	conflictstyle = diff3
+
+[rebase]
+	autosquash = true
+
+[push]
+	autoSetupRemote = true
+	default = current
+
+[rerere]
+	enabled = true
+[credential]
+	helper = osxkeychain
