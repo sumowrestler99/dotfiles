@@ -17,10 +17,10 @@ date:
   older:    "#6c7086"  # overlay0
 
 size:
-  none:       "#6c7086"  # overlay0
-  small:      "#a6e3a1"  # green
-  medium:     "#f9e2af"  # yellow
-  large:      "#f38ba8"  # red
+  none:   "#6c7086"  # overlay0
+  small:  "#a6e3a1"  # green
+  medium: "#f9e2af"  # yellow
+  large:  "#f38ba8"  # red
 
 links:
   valid:   "#89b4fa"  # blue
