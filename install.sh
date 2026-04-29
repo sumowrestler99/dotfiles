@@ -57,6 +57,9 @@ link zellij/config.kdl     .config/zellij/config.kdl
 # Starship
 link starship/starship.toml .config/starship.toml
 
+# lsd
+link lsd/colors.yaml .config/lsd/colors.yaml
+
 echo ""
 echo "Done. iTerm2 plist must be loaded manually via:"
 echo "  iTerm2 → Preferences → General → Preferences → Load from: ~/dotfiles/iterm2/"

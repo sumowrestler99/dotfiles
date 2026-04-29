@@ -13,6 +13,7 @@ Personal configuration files for macOS, managed with git and symlinks.
 | `wezterm/` | `wezterm.lua` | `~/.config/wezterm/` |
 | `zellij/` | `config.kdl` | `~/.config/zellij/` |
 | `starship/` | `starship.toml` | `~/.config/` |
+| `lsd/` | `colors.yaml` | `~/.config/lsd/` |
 
 Neovim config is maintained separately at [nvim-config](https://github.com/sumowrestler99/nvim-config).
 
@@ -41,4 +42,4 @@ The plist must be loaded manually:
 - macOS
 - [Homebrew](https://brew.sh)
 - A [Nerd Font](https://www.nerdfonts.com/) (used by starship, zellij, wezterm, nvim)
-- [Zellij](https://zellij.dev), [Starship](https://starship.rs), [tmux](https://github.com/tmux/tmux), [fzf](https://github.com/junegunn/fzf)
+- [Zellij](https://zellij.dev), [Starship](https://starship.rs), [tmux](https://github.com/tmux/tmux), [fzf](https://github.com/junegunn/fzf), [lsd](https://github.com/lsd-rs/lsd)

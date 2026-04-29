@@ -226,6 +226,22 @@ keybinds clear-defaults=true {
     }
 }
 
+themes {
+    catppuccin-mocha {
+        bg      "#1e1e2e"
+        fg      "#cdd6f4"
+        red     "#f38ba8"
+        green   "#a6e3a1"
+        blue    "#89b4fa"
+        yellow  "#f9e2af"
+        magenta "#cba6f7"
+        orange  "#fab387"
+        cyan    "#94e2d5"
+        black   "#181825"
+        white   "#bac2de"
+    }
+}
+
 // Plugin aliases - can be used to change the implementation of Zellij
 // changing these requires a restart to take effect
 plugins {
@@ -263,9 +279,7 @@ simplified_ui false
 osc8_hyperlinks true
 
 // Choose the theme that is specified in the themes section.
-// Default: default
-//
-// theme "dracula"
+theme "catppuccin-mocha"
 
 // Choose the base input mode of zellij.
 // locked = pass all keys to the terminal by default (safest with nvim/tmux)
