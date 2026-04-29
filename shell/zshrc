@@ -17,6 +17,8 @@ export COLORTERM=truecolor
 alias vi=nvim
 alias ls=lsd
 alias grep='grep --color=always'
+alias gsu='git status -uno'
+alias gdc='git diff --cached'
 
 # =============================================================================
 # Completion
