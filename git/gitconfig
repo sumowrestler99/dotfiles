@@ -10,13 +10,48 @@
 	defaultBranch = main
 
 [alias]
-	lg = log --oneline --graph --decorate --all
-	st = status -sb
+	# --- Navigation & Status ---
+	lg = log --oneline --graph --decorate          # compact branch graph
+	lga = log --oneline --graph --decorate --all   # same but all refs (remotes, tags)
+	ll = log --pretty=format:'%C(yellow)%h%Creset %ad %C(cyan)%an%Creset %s' --date=short  # log with date + author
+	st = status -sb                                # short status with branch info
+	aliases = config --get-regexp alias            # list all aliases
+
+	# --- Branching & Switching ---
 	co = checkout
+	sw = switch                                    # modern alternative to checkout for branches
 	br = branch
-	undo = reset HEAD~1 --mixed
-	uncommit = reset --soft HEAD~1
-	aliases = config --get-regexp alias
+	bra = branch -a                               # list all branches including remotes
+	brd = branch -d                               # safe delete (merged only)
+	brD = branch -D                               # force delete
+
+	# --- Staging & Committing ---
+	aa = add --all                                 # stage everything
+	ap = add --patch                               # interactive hunk staging
+	cm = commit -m                                 # commit with inline message
+	ca = commit --amend --no-edit                  # amend without changing message
+	cam = commit --amend                           # amend and edit message
+
+	# --- Undoing ---
+	undo = reset HEAD~1 --mixed                    # undo last commit, keep changes unstaged
+	uncommit = reset --soft HEAD~1                 # undo last commit, keep changes staged
+	unstage = restore --staged                     # unstage a file (e.g. git unstage foo.txt)
+	discard = restore                              # discard working tree changes
+
+	# --- Stashing ---
+	sl = stash list
+	sp = stash pop
+	ss = stash push -u -m                          # stash with a message (e.g. git ss "wip: foo")
+
+	# --- Remote & Sync ---
+	f = fetch --prune                              # fetch and remove stale remote-tracking branches
+	fp = fetch --prune --all                       # fetch from all remotes
+	pf = push --force-with-lease                   # safer force push (fails if remote moved on)
+
+	# --- Diffing ---
+	df = diff
+	dfc = diff --cached                            # diff staged changes
+	wip = commit -am "WIP"                         # quick save-everything commit
 
 [pull]
 	rebase = true
